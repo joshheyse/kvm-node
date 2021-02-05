@@ -15,7 +15,7 @@ export class ReadTransform extends Transform {
       const line = this.stringBuffer.substring(0, index - 1);
       this.stringBuffer = this.stringBuffer.substring(index + 1);
       index = this.stringBuffer.indexOf('\n');
-      console.log(line, this.stringBuffer, index);
+      console.log({line, next: this.stringBuffer, index});
 
       try {
         for (let i = 0; i < parsers.length; i++) {
