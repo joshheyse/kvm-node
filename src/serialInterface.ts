@@ -11,6 +11,7 @@ export default class SerialInterface {
       stopBits: 1,
       xoff: true,
       parity: 'none',
+      autoOpen: false,
     });
     this.serialPort.on('open', () => {
       console.log(`SerialPort ${path} open`);
