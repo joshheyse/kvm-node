@@ -10,9 +10,10 @@ async function sleep(ms: number): Promise<void> {
 async function main() {
   const kvmA = new SerialInterface('/dev/ttyUSB0');
   await kvmA.open();
+  await sleep(1000);
   for (let i = 0; i < 10; i++) {
     kvmA.sendCommand(ListInfoCommand);
-    await sleep(100);
+    await sleep(10000);
   }
 }
 
