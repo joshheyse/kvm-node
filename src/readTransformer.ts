@@ -12,7 +12,7 @@ export class ReadTransform extends Transform {
     this.stringBuffer += chunk.toString('ascii');
     let index = this.stringBuffer.indexOf('\r\n');
     while (index > 0) {
-      const line = this.stringBuffer.substring(0, index - 1);
+      const line = this.stringBuffer.substring(0, index);
       this.stringBuffer = this.stringBuffer.substring(index + 2);
       index = this.stringBuffer.indexOf('\r\n');
       console.log({line, next: this.stringBuffer, index});
