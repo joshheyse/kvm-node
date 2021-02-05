@@ -51,7 +51,7 @@ export default class SerialInterface {
 
   public async sendCommand(command: Command): Promise<void> {
     return new Promise((resolve, reject) => {
-      const commandText = command.write() + '\n';
+      const commandText = command.write() + '\r';
       console.log(`SerialPort ${this.path} sent ${commandText}`);
       this.serialPort.write(commandText, 'ascii');
       this.serialPort.drain((err: Error | null | undefined) => {
