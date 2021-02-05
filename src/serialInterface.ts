@@ -32,7 +32,7 @@ export default class SerialInterface {
 
   private onData(data: Buffer) {
     const dataString = data.toString('ascii');
-    console.log(`SerialPort ${this.path} data`, dataString);
+    console.log(`SerialPort ${this.path} data\n`, dataString, '<END>');
   }
 
   public async open(): Promise<void> {
@@ -44,7 +44,7 @@ export default class SerialInterface {
         setTimeout(async () => {
           await this.sendCommand(ResetBuffer);
           resolve();
-        });
+        }, 400);
       });
     });
   }
