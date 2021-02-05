@@ -2,6 +2,12 @@ export type Command = {
   write(): string;
 };
 
+export const ResetBuffer: Command = {
+  write(): string {
+    return '\n\n\n';
+  },
+};
+
 export const ListInfoCommand: Command = {
   write(): string {
     return 'k1p0';

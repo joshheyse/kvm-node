@@ -1,5 +1,5 @@
 import SerialPort from 'serialport';
-import {Command} from './commands';
+import {Command, ResetBuffer} from './commands';
 
 export default class SerialInterface {
   private serialPort: SerialPort;
@@ -41,7 +41,10 @@ export default class SerialInterface {
         if (err) {
           reject(err);
         }
-        resolve();
+        setTimeout(async () => {
+          await this.sendCommand(ResetBuffer);
+          resolve();
+        });
       });
     });
   }
