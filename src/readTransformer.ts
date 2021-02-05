@@ -14,17 +14,21 @@ export class ReadTransform extends Transform {
     while (index > 0) {
       const line = this.stringBuffer.substring(0, index);
       this.stringBuffer = this.stringBuffer.substring(index);
-      console.log(line);
-
-      for (let i = 0; i < parsers.length; i++) {
-        const {regex, type} = parsers[i];
-        const match = regex.exec(line);
-        if (match) {
-          this.push(new (Function.prototype.bind.apply(type, match as any))());
-          break;
-        }
-      }
       index = this.stringBuffer.indexOf('\n');
+      console.log(line, this.stringBuffer, index);
+
+      try {
+        for (let i = 0; i < parsers.length; i++) {
+          const {regex, type} = parsers[i];
+          const match = regex.exec(line);
+          if (match) {
+            this.push(new (Function.prototype.bind.apply(type, match as any))());
+            break;
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
     }
     callback();
   }
