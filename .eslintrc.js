@@ -1,16 +1,13 @@
 module.exports = {
   extends: [
-    'airbnb-typescript',
-    'airbnb/hooks',
     'plugin:@typescript-eslint/recommended',
     'plugin:jest/recommended',
     'prettier',
-    'prettier/react',
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended'
   ],
   ignorePatterns: ['node_modules', 'build', 'dist', 'amplify', '*.js'],
-  plugins: ['react', '@typescript-eslint', 'jest'],
+  plugins: ['@typescript-eslint', 'jest'],
   env: {
     browser: true,
     es6: true,
@@ -48,17 +45,6 @@ module.exports = {
 
     // This has to be set to off to prevent errors when import modules from lerna root
     'import/no-extraneous-dependencies': 'off',
-
-    // We will use TypeScript's types for component props instead
-    'react/prop-types': 'off',
-
-    // No need to import React when using Next.js
-    'react/react-in-jsx-scope': 'off',
-    'react/no-array-index-key': 'off',
-    'react/require-default-props': 'off',
-
-    // This rule is not compatible with Next.js's <Link /> components
-    'jsx-a11y/anchor-is-valid': 'off',
 
     // Why would you want unused vars?
     '@typescript-eslint/no-unused-vars': ['error'],
