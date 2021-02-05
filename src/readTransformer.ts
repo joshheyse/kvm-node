@@ -13,7 +13,7 @@ export class ReadTransform extends Transform {
     let index = this.stringBuffer.indexOf('\r\n');
     while (index > 0) {
       const line = this.stringBuffer.substring(0, index - 1);
-      this.stringBuffer = this.stringBuffer.substring(index + 1);
+      this.stringBuffer = this.stringBuffer.substring(index + 2);
       index = this.stringBuffer.indexOf('\r\n');
       console.log({line, next: this.stringBuffer, index});
 
