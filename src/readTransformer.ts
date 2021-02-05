@@ -14,6 +14,7 @@ export class ReadTransform extends Transform {
     while (index > 0) {
       const line = this.stringBuffer.substring(0, index);
       this.stringBuffer = this.stringBuffer.substring(index);
+      console.log(line);
 
       for (let i = 0; i < parsers.length; i++) {
         const {regex, type} = parsers[i];
