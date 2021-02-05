@@ -35,7 +35,7 @@ export default class SerialInterface {
   }
 
   private onData(data: Buffer) {
-    console.log(`SerialPort ${this.path} data`, data.constructor.name, data);
+    console.log(`SerialPort ${this.path}`, data);
   }
 
   public async open(): Promise<void> {
