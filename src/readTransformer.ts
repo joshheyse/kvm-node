@@ -10,11 +10,11 @@ export class ReadTransform extends Transform {
 
   public _transform(chunk: Buffer, _encoding: BufferEncoding, callback: TransformCallback): void {
     this.stringBuffer += chunk.toString('ascii');
-    let index = this.stringBuffer.indexOf('\n');
+    let index = this.stringBuffer.indexOf('\r\n');
     while (index > 0) {
       const line = this.stringBuffer.substring(0, index - 1);
       this.stringBuffer = this.stringBuffer.substring(index + 1);
-      index = this.stringBuffer.indexOf('\n');
+      index = this.stringBuffer.indexOf('\r\n');
       console.log({line, next: this.stringBuffer, index});
 
       try {
