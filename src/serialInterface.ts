@@ -25,7 +25,9 @@ export default class SerialInterface {
     this.serialPort.on('error', (err: Error | null) => {
       console.error(`SerialPort ${path} error`, err);
     });
-    this.serialPort.on('data', this.onData.bind(this));
+    this.serialPort.on('data', (data: Buffer) => {
+      this.onData(data);
+    });
   }
 
   private onData(data: Buffer) {
