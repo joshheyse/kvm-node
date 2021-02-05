@@ -1,6 +1,9 @@
+import autobind from 'autobind-decorator';
 import SerialPort from 'serialport';
-import {Command, ResetBuffer} from './commands';
+import {Command} from './commands';
+import {ReadTransform} from './readTransformer';
 
+@autobind
 export default class SerialInterface {
   private serialPort: SerialPort;
 
@@ -25,13 +28,13 @@ export default class SerialInterface {
     this.serialPort.on('error', (err: Error | null) => {
       console.error(`SerialPort ${path} error`, err);
     });
-    this.serialPort.on('data', (data: Buffer) => {
-      this.onData(data);
-    });
+    const transform = new ReadTransform();
+    transform.on('data', this.onData);
   }
 
   private onData(data: Buffer) {
     const dataString = data.toString('ascii');
+
     console.log(`SerialPort ${this.path} data\n`, dataString, '<END>');
   }
 
@@ -42,7 +45,6 @@ export default class SerialInterface {
           reject(err);
         }
         setTimeout(async () => {
-          await this.sendCommand(ResetBuffer);
           resolve();
         }, 400);
       });
