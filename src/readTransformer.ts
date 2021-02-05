@@ -10,7 +10,7 @@ export class ReadTransform extends Transform {
 
   public _transform(chunk: Buffer, _encoding: BufferEncoding, callback: TransformCallback): void {
     this.stringBuffer += chunk.toString('ascii');
-    const index = this.stringBuffer.indexOf('\n');
+    let index = this.stringBuffer.indexOf('\n');
     while (index > 0) {
       const line = this.stringBuffer.substring(0, index);
       this.stringBuffer = this.stringBuffer.substring(index);
@@ -24,6 +24,7 @@ export class ReadTransform extends Transform {
           break;
         }
       }
+      index = this.stringBuffer.indexOf('\n');
     }
     callback();
   }
