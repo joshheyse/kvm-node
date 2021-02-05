@@ -1,7 +1,7 @@
 import {Transform, TransformCallback} from 'stream';
 
 export class ReadTransform extends Transform {
-  private buf: Buffer = new Buffer(0);
+  private buf: Buffer = Buffer.alloc(0);
 
   public _transform(chunk: Buffer, _encoding: BufferEncoding, callback: TransformCallback): void {
     this.buf = Buffer.concat([this.buf, chunk]);

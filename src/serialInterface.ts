@@ -30,6 +30,8 @@ export default class SerialInterface {
     });
     const transform = new ReadTransform();
     transform.on('data', this.onData);
+
+    this.serialPort.pipe(transform);
   }
 
   private onData(data: Buffer) {
