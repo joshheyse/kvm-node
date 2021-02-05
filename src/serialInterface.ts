@@ -47,7 +47,9 @@ export default class SerialInterface {
   }
 
   public sendCommand(command: Command) {
-    this.serialPort.write(command.write() + '\n', 'ascii');
-    this.serialPort.drain();
+    const commandText = command.write();
+    console.log(`SerialPort ${this.path} sent ${commandText}`);
+    this.serialPort.write(commandText + '\n', 'ascii');
+    // this.serialPort.drain();
   }
 }
