@@ -7,9 +7,9 @@ async function main() {
   await kvmA.sendCommand(ListInfoCommand);
   await kvmA.sendCommand(ChangePort(1));
 
-  const kvmB = new SerialInterface('/dev/ttyUSB1');
-  await kvmB.open();
-  await kvmB.sendCommand(ListInfoCommand);
+  // const kvmB = new SerialInterface('/dev/ttyUSB1');
+  // await kvmB.open();
+  // await kvmB.sendCommand(ListInfoCommand);
 }
 
 main();
