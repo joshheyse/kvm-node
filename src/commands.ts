@@ -39,7 +39,7 @@ export function SetBuzzer(on: boolean): Command {
 }
 
 export class PortEvent {
-  constructor(public readonly port: Port | number) {}
+  constructor(public readonly port: Port) {}
 }
 
 export class HotKeyEvent {
@@ -51,7 +51,7 @@ export class BuzzerEvent {
 }
 
 export class HubSyncEvent {
-  constructor(public readonly hub: Hub | number, public readonly hubSync: Sync) {}
+  constructor(public readonly hub: Hub, public readonly hubSync: Sync) {}
 }
 
 export class AudioSyncEvent {

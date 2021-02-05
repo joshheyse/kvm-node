@@ -1,13 +1,15 @@
 import autobind from 'autobind-decorator';
+import {EventEmitter} from 'events';
 import SerialPort from 'serialport';
 import {Command} from './commands';
 import {ReadTransform} from './readTransformer';
 
 @autobind
-export default class SerialInterface {
+export default class SerialInterface extends EventEmitter {
   private serialPort: SerialPort;
 
   constructor(public readonly path: string) {
+    super();
     this.serialPort = new SerialPort(this.path, {
       baudRate: 115200,
       dataBits: 8,
@@ -34,8 +36,9 @@ export default class SerialInterface {
     this.serialPort.pipe(transform);
   }
 
-  private onData(data: Buffer) {
+  private onData(data: any) {
     console.log(`SerialPort ${this.path}`, data);
+    this.emit('data', data);
   }
 
   public async open(): Promise<void> {

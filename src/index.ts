@@ -1,5 +1,5 @@
 import SerialInterface from './serialInterface';
-import {ListInfoCommand} from './commands';
+import {ListInfoCommand, PortEvent, ChangePort} from './commands';
 
 async function main() {
   const kvmA = new SerialInterface('/dev/ttyUSB0');
@@ -9,6 +9,11 @@ async function main() {
   const kvmB = new SerialInterface('/dev/ttyUSB1');
   await kvmB.open();
   await kvmB.sendCommand(ListInfoCommand);
+  kvmB.on('data', (data) => {
+    if (data instanceof PortEvent) {
+      kvmA.sendCommand(ChangePort(data.port));
+    }
+  });
 }
 
 main();
