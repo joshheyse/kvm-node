@@ -4,7 +4,7 @@ export type Command = {
 
 export const ListInfoCommand: Command = {
   write(): string {
-    return 'K1P0';
+    return 'k1p0';
   },
 };
 
