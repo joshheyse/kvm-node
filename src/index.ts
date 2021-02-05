@@ -9,7 +9,7 @@ async function main() {
   const kvmB = new SerialInterface('/dev/ttyUSB1');
   await kvmB.open();
   await kvmB.sendCommand(ListInfoCommand);
-  kvmB.on('data', (data) => {
+  kvmA.on('data', (data) => {
     if (data instanceof PortEvent) {
       kvmA.sendCommand(ChangePort(data.port));
     }
