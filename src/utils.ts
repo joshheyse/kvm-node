@@ -3,3 +3,9 @@ export async function sleep(ms: number): Promise<void> {
     setTimeout(resolve, ms);
   });
 }
+
+export function staticImplements<T>() {
+  return <U extends T>(constructor: U) => {
+    constructor;
+  };
+}

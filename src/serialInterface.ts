@@ -35,9 +35,7 @@ export default class SerialInterface {
   }
 
   private onData(data: Buffer) {
-    const dataString = data.toString('ascii');
-
-    console.log(`SerialPort ${this.path} data\n`, dataString, '<END>');
+    console.log(`SerialPort ${this.path} data`, data.constructor.name, data);
   }
 
   public async open(): Promise<void> {
