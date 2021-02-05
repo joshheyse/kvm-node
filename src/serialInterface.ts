@@ -46,10 +46,17 @@ export default class SerialInterface {
     });
   }
 
-  public sendCommand(command: Command) {
-    const commandText = command.write() + '\n';
-    console.log(`SerialPort ${this.path} sent ${commandText}`);
-    this.serialPort.write(commandText, 'ascii');
-    this.serialPort.drain();
+  public async sendCommand(command: Command): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const commandText = command.write() + '\n';
+      console.log(`SerialPort ${this.path} sent ${commandText}`);
+      this.serialPort.write(commandText, 'ascii');
+      this.serialPort.drain((err: Error | null | undefined) => {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+    });
   }
 }
