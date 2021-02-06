@@ -11,7 +11,7 @@ class KvmSync {
   private log: bunyan;
 
   constructor(private kvms: SerialInterface[], log: bunyan) {
-    this.log = log.child({name: 'sync'});
+    this.log = log.child({service: 'sync'});
   }
 
   public attach() {
