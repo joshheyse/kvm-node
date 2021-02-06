@@ -36,7 +36,7 @@ export class ReadTransform extends Transform {
 
 const parsers = [
   {
-    regex: /CH\-?(?<channel>\d)/gm,
+    regex: /CH\-?(?<channel>1|2|3|4)/gm,
     type: PortEvent,
   },
   {
