@@ -25,7 +25,7 @@ export class ReadTransform extends Transform {
             console.log(match);
           }
           if (match) {
-            this.push(new (Function.prototype.bind.apply(type, match as any))());
+            this.push(new (Function.prototype.bind.apply(type, [null, ...match.slice(1)]))());
             continue;
           }
         }
