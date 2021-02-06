@@ -33,7 +33,7 @@ class KvmSync {
 }
 
 async function main() {
-  const log = bunyan.createLogger({name: 'kvm_sync', stream: process.stdout});
+  const log = bunyan.createLogger({name: 'kvm_sync', stream: process.stdout, level: 'info'});
   const kvmA = new SerialInterface('/dev/ttyUSB0', log);
   await kvmA.open();
 
