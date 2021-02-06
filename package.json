@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "run": "yarn && tsc && node ./dist/index.js"
   },
   "devDependencies": {
     "@types/jest": "^26.0.19",
