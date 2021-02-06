@@ -23,7 +23,7 @@ export class ReadTransform extends Transform {
           const match = regex.exec(line);
           if (match) {
             this.push(new (Function.prototype.bind.apply(type, match as any))());
-            break;
+            continue;
           }
         }
       } catch (err) {
