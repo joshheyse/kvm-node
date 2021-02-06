@@ -1,4 +1,5 @@
 import autobind from 'autobind-decorator';
+import bunyan from 'bunyan';
 import {Bus} from 'strongbus';
 import SerialPort from 'serialport';
 import {Port, HotKey, Sync, Status, Hub} from './types';
@@ -30,7 +31,10 @@ export default class SerialInterface {
   private _hub2: Sync | undefined;
   private _audio: Sync | undefined;
 
-  constructor(public readonly path: string) {
+  private _log: bunyan;
+
+  constructor(public readonly path: string, log: bunyan) {
+    this._log = log.child({path});
     this.serialPort = new SerialPort(this.path, {
       baudRate: 115200,
       dataBits: 8,
@@ -39,19 +43,17 @@ export default class SerialInterface {
       parity: 'none',
       autoOpen: false,
     });
+    this.serialPort.on('close', () => this.onClose);
     this.serialPort.on('open', () => {
-      console.log(`SerialPort ${path} open`);
-    });
-    this.serialPort.on('close', () => {
-      console.log(`SerialPort ${path} close`);
+      this._log.info('open');
     });
     this.serialPort.on('drain', () => {
-      console.log(`SerialPort ${path} drain`);
+      this._log.info('drain');
     });
     this.serialPort.on('error', (err: Error | null) => {
-      console.error(`SerialPort ${path} error`, err);
+      this._log.error('error', err);
     });
-    const transform = new ReadTransform(this.path);
+    const transform = new ReadTransform(this.path, this._log);
     transform.on('data', this.onData);
 
     this.serialPort.pipe(transform);
@@ -82,7 +84,7 @@ export default class SerialInterface {
   }
 
   private onData(data: any) {
-    console.log(`SerialPort ${this.path}`, data);
+    this._log.info('data', data);
     if (data instanceof PortEvent) {
       this._port = data.port;
       this._bus.emit('port', undefined);
@@ -110,10 +112,25 @@ export default class SerialInterface {
     }
   }
 
+  private async onClose() {
+    this._log.info('close');
+    while(!this.serialPort.isOpen) {
+      sleep(100);
+      try {
+        await this.open();
+      }
+      catch {
+        this._log.info('failed to open during reopen');
+      }
+    }
+  }
+
   public async open(): Promise<void> {
+    this._log.info('openning');
     return new Promise((resolve, reject) => {
       this.serialPort.open(async (err) => {
         if (err) {
+          this._log.info('error oppening', err);
           reject(err);
         }
         // Wait for connection to open
@@ -131,9 +148,9 @@ export default class SerialInterface {
 
   public async sendCommand(command: Command): Promise<void> {
     return new Promise((resolve, reject) => {
-      const commandText = command.write() + '\r';
-      console.log(`SerialPort ${this.path} sent ${commandText}`);
-      this.serialPort.write(commandText, 'ascii');
+      const commandText = command.write();
+      this._log.info(`sent ${commandText}`);
+      this.serialPort.write(commandText + '\r', 'ascii');
       this.serialPort.drain((err: Error | null | undefined) => {
         if (err) {
           reject(err);

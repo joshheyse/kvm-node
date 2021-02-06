@@ -27,8 +27,10 @@
     "typescript": "^4.1.2"
   },
   "dependencies": {
+    "@types/bunyan": "^1.8.6",
     "autobind": "^1.0.3",
     "autobind-decorator": "^2.4.0",
+    "bunyan": "^1.8.15",
     "lodash": "^4.17.20",
     "serialport": "^9.0.6",
     "strongbus": "^2.1.3"

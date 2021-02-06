@@ -1,10 +1,11 @@
 import {Transform, TransformCallback} from 'stream';
 import {PortEvent, HotKeyEvent, BuzzerEvent, HubSyncEvent, AudioSyncEvent} from './commands';
+import bunyan from 'bunyan';
 
 export class ReadTransform extends Transform {
   private stringBuffer = '';
 
-  constructor(public readonly path: string) {
+  constructor(public readonly path: string, private log: bunyan) {
     super({objectMode: true});
   }
 
@@ -15,7 +16,7 @@ export class ReadTransform extends Transform {
       const line = this.stringBuffer.substring(0, index);
       this.stringBuffer = this.stringBuffer.substring(index + 2);
       index = this.stringBuffer.indexOf('\r\n');
-
+      this.log.trace({line, rest: this.stringBuffer});
       try {
         for (let i = 0; i < parsers.length; i++) {
           const {regex, type} = parsers[i];
@@ -27,7 +28,7 @@ export class ReadTransform extends Transform {
         }
       }
       catch (err) {
-        console.error(err);
+        this.log.error(err);
       }
     }
     callback();
