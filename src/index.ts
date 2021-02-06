@@ -10,8 +10,8 @@ async function main() {
   await kvmB.open();
   await kvmB.sendCommand(ListInfoCommand);
   kvmB.on('data', (data) => {
-    console.log('syncing port');
     if (data instanceof PortEvent) {
+      console.log(`syncing to port ${data.port}`);
       kvmA.sendCommand(ChangePort(data.port));
     }
   });
