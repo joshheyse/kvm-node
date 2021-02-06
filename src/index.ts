@@ -8,7 +8,11 @@ import bunyan from 'bunyan';
 @autobind
 class KvmSync {
 
-  constructor(private kvms: SerialInterface[]) {}
+  private log: bunyan;
+
+  constructor(private kvms: SerialInterface[], log: bunyan) {
+    this.log = log.child({name: 'sync'});
+  }
 
   public attach() {
     this.kvms.forEach(kvm => kvm.every(this.handleEvent.bind(this, kvm)));
@@ -16,6 +20,7 @@ class KvmSync {
 
   private handleEvent(source: SerialInterface, event: keyof EventMap) {
     if(event === 'port') {
+      this.log.info(`port event from ${source}`);
       this.kvms.forEach(dest => {
         if(dest === source || dest.port === source.port) {
           return;
@@ -36,9 +41,9 @@ async function main() {
   await kvmB.open();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const kvmSync = new KvmSync([kvmA, kvmB]);
+  const kvmSync = new KvmSync([kvmA, kvmB], log);
   kvmSync.attach();
-  console.log('KVM Sync running');
+  log.info('KVM Sync running');
 }
 
 main();
