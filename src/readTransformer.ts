@@ -15,15 +15,11 @@ export class ReadTransform extends Transform {
       const line = this.stringBuffer.substring(0, index);
       this.stringBuffer = this.stringBuffer.substring(index + 2);
       index = this.stringBuffer.indexOf('\r\n');
-      console.info({path: this.path, line, next: this.stringBuffer, index});
 
       try {
         for (let i = 0; i < parsers.length; i++) {
           const {regex, type} = parsers[i];
           const match = regex.exec(line);
-          if (line === 'CH3') {
-            console.log(match);
-          }
           if (match) {
             this.push(new (Function.prototype.bind.apply(type, [null, ...match.slice(1)]))());
             continue;
