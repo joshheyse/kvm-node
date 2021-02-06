@@ -25,7 +25,7 @@ export const ListInfoCommand: Command = {
 export function ChangePort(port: Port): Command {
   return {
     write(): string {
-      return `CH${port}`;
+      return `ch${port}`;
     },
   };
 }

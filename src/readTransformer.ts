@@ -39,23 +39,23 @@ export class ReadTransform extends Transform {
 
 const parsers = [
   {
-    regex: /CH\-?(?<channel>1|2|3|4)/gm,
+    regex: /CH\-?(?<channel>1|2|3|4)/,
     type: PortEvent,
   },
   {
-    regex: /Hot KEY\s*:\s*(?<status>CTRL|SHIFT|SCROLL|CAPS)/gm,
+    regex: /Hot KEY\s*:\s*(?<status>CTRL|SHIFT|SCROLL|CAPS)/,
     type: HotKeyEvent,
   },
   {
-    regex: /Buzzer\s*:\s*(?<status>ON|OFF)/gm,
+    regex: /Buzzer\s*:\s*(?<status>ON|OFF)/,
     type: BuzzerEvent,
   },
   {
-    regex: /HUB(?<hub>1|2)\s*:\s*(?<sync>Sync|1|2|3|4)/gm,
+    regex: /HUB(?<hub>1|2)\s*:\s*(?<sync>Sync|1|2|3|4)/,
     type: HubSyncEvent,
   },
   {
-    regex: /AUDIO\s*:\s*(?<sync>Sync|1|2|3|4)/gm,
+    regex: /AUDIO\s*:\s*(?<sync>Sync|1|2|3|4)/,
     type: AudioSyncEvent,
   },
 ];
