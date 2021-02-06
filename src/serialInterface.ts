@@ -30,7 +30,7 @@ export default class SerialInterface extends EventEmitter {
     this.serialPort.on('error', (err: Error | null) => {
       console.error(`SerialPort ${path} error`, err);
     });
-    const transform = new ReadTransform();
+    const transform = new ReadTransform(this.path);
     transform.on('data', this.onData);
 
     this.serialPort.pipe(transform);

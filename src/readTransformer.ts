@@ -4,7 +4,7 @@ import {PortEvent, HotKeyEvent, BuzzerEvent, HubSyncEvent, AudioSyncEvent} from 
 export class ReadTransform extends Transform {
   private stringBuffer = '';
 
-  constructor() {
+  constructor(public readonly path: string) {
     super({objectMode: true});
   }
 
@@ -15,7 +15,7 @@ export class ReadTransform extends Transform {
       const line = this.stringBuffer.substring(0, index);
       this.stringBuffer = this.stringBuffer.substring(index + 2);
       index = this.stringBuffer.indexOf('\r\n');
-      console.info({line, next: this.stringBuffer, index});
+      console.info({path: this.path, line, next: this.stringBuffer, index});
 
       try {
         for (let i = 0; i < parsers.length; i++) {
