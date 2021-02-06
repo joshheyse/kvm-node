@@ -1,10 +1,4 @@
-import _ from 'lodash';
-
-export type Port = '1' | '2' | '3' | '4';
-export type HotKey = 'CTRL' | 'SHIFT' | 'SCROLL' | 'CAPS';
-export type Hub = '1' | '2';
-export type Sync = 'Sync' | Port;
-export type Status = 'ON' | 'OFF';
+import {Port, HotKey, Hub, Sync, Status} from './types';
 
 export type Command = {
   write(): string;
@@ -51,11 +45,11 @@ export class BuzzerEvent {
 }
 
 export class HubSyncEvent {
-  constructor(public readonly hub: Hub, public readonly hubSync: Sync) {}
+  constructor(public readonly hub: Hub, public readonly sync: Sync) {}
 }
 
 export class AudioSyncEvent {
-  constructor(public readonly hubSync: Sync) {}
+  constructor(public readonly sync: Sync) {}
 }
 
 export class MouseChangeChannelEvent {

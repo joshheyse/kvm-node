@@ -2,9 +2,10 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:jest/recommended',
-    'prettier',
     'prettier/@typescript-eslint',
-    'plugin:prettier/recommended'
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
   ],
   ignorePatterns: ['node_modules', 'build', 'dist', 'amplify', '*.js'],
   plugins: ['@typescript-eslint', 'jest'],
@@ -38,6 +39,10 @@ module.exports = {
     // Don't mix line breaks
     'linebreak-style': ['error', 'unix'],
 
+    'indent': 'off',
+    'brace-style': ['error', 'stroustrup'],
+    '@typescript-eslint/indent': ['error', 2],
+
     // Not that civilized
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
@@ -51,7 +56,5 @@ module.exports = {
 
     // Don't require extensions, except for non js/ts files
     'import/extensions': ['error', 'never', { 'svg': 'always', 'css': 'always', 'scss': 'always', 'json': 'always'  }],
-
-    'prettier/prettier': ['error', {}, { usePrettierrc: true }], // Includes .prettierrc.js rules
   },
 };

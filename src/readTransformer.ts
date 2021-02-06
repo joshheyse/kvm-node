@@ -25,7 +25,8 @@ export class ReadTransform extends Transform {
             continue;
           }
         }
-      } catch (err) {
+      }
+      catch (err) {
         console.error(err);
       }
     }
