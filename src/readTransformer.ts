@@ -21,6 +21,9 @@ export class ReadTransform extends Transform {
         for (let i = 0; i < parsers.length; i++) {
           const {regex, type} = parsers[i];
           const match = regex.exec(line);
+          if (line === 'CH3') {
+            console.log(match);
+          }
           if (match) {
             this.push(new (Function.prototype.bind.apply(type, match as any))());
             continue;
