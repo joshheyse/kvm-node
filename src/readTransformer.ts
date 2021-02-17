@@ -57,7 +57,7 @@ const parsers = [
     type: AudioSyncEvent,
   },
   {
-    regex: /WAKE-UP\s*:\s*(?<sync>ALL|1|2)/i,
+    regex: /WAKE-UP\s*:\s*DP-(?<sync>ALL|1|2)/i,
     type: WakeupEvent
   },
 ];
