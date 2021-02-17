@@ -20,7 +20,7 @@ class KvmSync {
 
   private handleEvent<T extends keyof EventMap>(source: SerialInterface, event: T, args: EventMap[T]) {
     if(event === 'port') {
-      this.log.info(`port event from ${source}, ${args}`);
+      this.log.info(`port event from ${source.path}, ${args}`);
       this.kvms.forEach(dest => {
         if(dest === source || dest.port === source.port) {
           return;
@@ -29,9 +29,9 @@ class KvmSync {
       });
     }
     if(event === 'wakeup') {
-      this.log.info(`wakeup event from ${source}, ${event}`);
+      this.log.info(`wakeup event from ${source.path}, ${event}`);
       this.kvms.forEach(dest => {
-        if(dest === source || dest.port === source.port) {
+        if(dest === source) {
           return;
         }
         dest.sendCommand(WakeUp(args as Wakeup));

@@ -45,7 +45,6 @@ export default class SerialInterface {
   private _hub2: Sync | undefined;
   private _audio: Sync | undefined;
 
-
   private _lastWakeup: LastWakeup = {};
 
   constructor(public readonly path: string, log: bunyan, options?: SerialInterfaceOptions) {
