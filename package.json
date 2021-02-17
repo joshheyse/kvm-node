@@ -5,6 +5,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
+    "start": "tsc && node ./dist/index.js",
     "run": "yarn && tsc && node ./dist/index.js"
   },
   "devDependencies": {
