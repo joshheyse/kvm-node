@@ -25,7 +25,7 @@ class KvmSync {
         if(dest === source || dest.port === source.port) {
           return;
         }
-        dest.sendCommand(ChangePort(dest.port!));
+        dest.sendCommand(ChangePort(source.port!));
       });
     }
     if(event === 'wakeup') {
@@ -42,7 +42,7 @@ class KvmSync {
 }
 
 async function main() {
-  const log = bunyan.createLogger({name: 'kvm_sync', stream: process.stdout, level: 'info'});
+  const log = bunyan.createLogger({name: 'kvm_sync', stream: process.stdout, level: 'trace'});
   const kvmA = new SerialInterface('/dev/ttyUSB0', log);
   await kvmA.open();
 

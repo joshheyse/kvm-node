@@ -165,11 +165,8 @@ export default class SerialInterface {
         // Wait for connection to open
         sleep(400);
         this.sendCommand(ResetBuffer);
-        sleep(100);
-        this.sendCommand(ResetBuffer);
-        sleep(100);
+        sleep(50);
         this.sendCommand(ListInfoCommand);
-        sleep(400);
         resolve();
       });
     });
