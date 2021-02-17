@@ -1,5 +1,5 @@
 import {Transform, TransformCallback} from 'stream';
-import {PortEvent, HotKeyEvent, BuzzerEvent, HubSyncEvent, AudioSyncEvent} from './events';
+import {PortEvent, HotKeyEvent, BuzzerEvent, HubSyncEvent, AudioSyncEvent, WakeupEvent} from './events';
 import bunyan from 'bunyan';
 
 export class ReadTransform extends Transform {
@@ -58,6 +58,6 @@ const parsers = [
   },
   {
     regex: /WAKE-UP\s*:\s*(?<sync>ALL|1|2)/i,
-    type: AudioSyncEvent,
+    type: WakeupEvent
   },
 ];
