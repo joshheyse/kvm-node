@@ -136,6 +136,7 @@ export default class SerialInterface {
       this._bus.emit('audio', undefined);
     }
     else if (data instanceof WakeupEvent) {
+      this._log.info('wake up event handled in data');
       this._lastWakeup[data.wakeup] = (new Date()).valueOf();
       this._bus.emit('wakeup', data.wakeup);
     }
