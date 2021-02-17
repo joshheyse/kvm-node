@@ -1,7 +1,9 @@
-import {Port, HotKey, Hub, Sync, Status} from './types';
+import SerialInterface from './serialInterface';
+import {Port, Wakeup} from './types';
 
 export type Command = {
   write(): string;
+  canSend?(kvm: SerialInterface): boolean;
 };
 
 export const ResetBuffer: Command = {
@@ -32,26 +34,17 @@ export function SetBuzzer(on: boolean): Command {
   };
 }
 
-export class PortEvent {
-  constructor(public readonly port: Port) {}
+export function WakeUp(wakeup: Wakeup): Command {
+  return {
+    write(): string {
+      if(wakeup === 'ALL') {
+        return 'Wake-Up : DP-ALL';
+      }
+      return `WAKE_UP : DP-${wakeup}`;
+    },
+    canSend(kvm: SerialInterface): boolean {
+      return kvm.canSendWakeup(wakeup);
+    }
+  };
 }
 
-export class HotKeyEvent {
-  constructor(public readonly hotKey: HotKey) {}
-}
-
-export class BuzzerEvent {
-  constructor(public readonly status: Status) {}
-}
-
-export class HubSyncEvent {
-  constructor(public readonly hub: Hub, public readonly sync: Sync) {}
-}
-
-export class AudioSyncEvent {
-  constructor(public readonly sync: Sync) {}
-}
-
-export class MouseChangeChannelEvent {
-  constructor(public readonly status: Status) {}
-}

@@ -1,7 +1,7 @@
 import SerialInterface, {EventMap} from './serialInterface';
 import autobind from 'autobind-decorator';
-import {ChangePort} from './commands';
-import {Port} from './types';
+import {ChangePort, WakeUp} from './commands';
+import {Wakeup} from './types';
 import bunyan from 'bunyan';
 
 
@@ -18,14 +18,23 @@ class KvmSync {
     this.kvms.forEach(kvm => kvm.every(this.handleEvent.bind(this, kvm)));
   }
 
-  private handleEvent(source: SerialInterface, event: keyof EventMap) {
+  private handleEvent<T extends keyof EventMap>(source: SerialInterface, event: T, args: EventMap[T]) {
     if(event === 'port') {
-      this.log.info(`port event from ${source}`);
+      this.log.info(`port event from ${source}, ${args}`);
       this.kvms.forEach(dest => {
         if(dest === source || dest.port === source.port) {
           return;
         }
-        dest.sendCommand(ChangePort(source.port as Port));
+        dest.sendCommand(ChangePort(dest.port!));
+      });
+    }
+    if(event === 'wakeup') {
+      this.log.info(`wakeup event from ${source}, ${event}`);
+      this.kvms.forEach(dest => {
+        if(dest === source || dest.port === source.port) {
+          return;
+        }
+        dest.sendCommand(WakeUp(args as Wakeup));
       });
     }
   }

@@ -2,8 +2,9 @@ import autobind from 'autobind-decorator';
 import bunyan from 'bunyan';
 import {Bus} from 'strongbus';
 import SerialPort from 'serialport';
-import {Port, HotKey, Sync, Status, Hub} from './types';
-import {Command, PortEvent, HotKeyEvent, BuzzerEvent, HubSyncEvent, AudioSyncEvent, ListInfoCommand, ResetBuffer} from './commands';
+import {Port, HotKey, Sync, Status, Hub, Wakeup} from './types';
+import {Command, ListInfoCommand, ResetBuffer} from './commands';
+import {PortEvent, HotKeyEvent, BuzzerEvent, HubSyncEvent, AudioSyncEvent, WakeupEvent} from './events';
 import {ReadTransform} from './readTransformer';
 import {sleep} from './utils';
 
@@ -13,11 +14,24 @@ export type EventMap = {
   buzzer: void;
   hub: Hub;
   audio: void;
+  wakeup: Wakeup;
+};
+
+type SerialInterfaceOptions = {
+  wakeupThrottle: number
+};
+
+
+type LastWakeup = {
+  [key in Wakeup]?: number;
 };
 
 @autobind
 export default class SerialInterface {
-  private serialPort: SerialPort;
+
+  private readonly serialPort: SerialPort;
+  private readonly _log: bunyan;
+  private readonly _options: SerialInterfaceOptions;
 
   private _bus = new Bus<EventMap>();
   public on = this._bus['on'];
@@ -31,10 +45,12 @@ export default class SerialInterface {
   private _hub2: Sync | undefined;
   private _audio: Sync | undefined;
 
-  private _log: bunyan;
 
-  constructor(public readonly path: string, log: bunyan) {
+  private _lastWakeup: LastWakeup = {};
+
+  constructor(public readonly path: string, log: bunyan, options: SerialInterfaceOptions) {
     this._log = log.child({path});
+    this._options  = Object.assign({}, {wakeupThrottle: 5}, options);
     this.serialPort = new SerialPort(this.path, {
       baudRate: 115200,
       dataBits: 8,
@@ -83,6 +99,15 @@ export default class SerialInterface {
     return this._audio;
   }
 
+  public canSendWakeup(wakeup: Wakeup): boolean {
+    const now = (new Date()).valueOf();
+    if (!this._lastWakeup?[wakeup] || ((now - this._lastWakeup[wakeup]) > this._options.wakeupThrottle)) {
+      this._lastWakeup[wakeup] = now;
+      return true;
+    }
+    return false;
+  }
+
   private onData(data: any) {
     this._log.info('data', data);
     if (data instanceof PortEvent) {
@@ -109,6 +134,10 @@ export default class SerialInterface {
     else if (data instanceof AudioSyncEvent) {
       this._audio = data.sync;
       this._bus.emit('audio', undefined);
+    }
+    else if (data instanceof WakeupEvent) {
+      this._lastWakeup[data.wakeup] = (new Date()).valueOf();
+      this._bus.emit('wakeup', data.wakeup);
     }
   }
 
@@ -147,6 +176,9 @@ export default class SerialInterface {
   }
 
   public async sendCommand(command: Command): Promise<void> {
+    if(command.canSend && !command.canSend(this)) {
+      return;
+    }
     return new Promise((resolve, reject) => {
       const commandText = command.write();
       this._log.info(`sent ${commandText}`);
