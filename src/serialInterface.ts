@@ -48,7 +48,7 @@ export default class SerialInterface {
 
   private _lastWakeup: LastWakeup = {};
 
-  constructor(public readonly path: string, log: bunyan, options: SerialInterfaceOptions) {
+  constructor(public readonly path: string, log: bunyan, options?: SerialInterfaceOptions) {
     this._log = log.child({path});
     this._options  = Object.assign({}, {wakeupThrottle: 5}, options);
     this.serialPort = new SerialPort(this.path, {
@@ -101,7 +101,7 @@ export default class SerialInterface {
 
   public canSendWakeup(wakeup: Wakeup): boolean {
     const now = (new Date()).valueOf();
-    if (!this._lastWakeup?[wakeup] || ((now - this._lastWakeup[wakeup]) > this._options.wakeupThrottle)) {
+    if (!this._lastWakeup[wakeup] || ((now - this._lastWakeup[wakeup]!) > this._options.wakeupThrottle)) {
       this._lastWakeup[wakeup] = now;
       return true;
     }
