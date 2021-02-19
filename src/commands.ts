@@ -40,7 +40,7 @@ export function WakeUp(wakeup: Wakeup): Command {
       if(wakeup === 'ALL') {
         return 'Wake-Up : DP-ALL';
       }
-      return `WAKE_UP : DP-${wakeup}`;
+      return `WAKE-UP : DP-${wakeup}`;
     },
     canSend(kvm: SerialInterface): boolean {
       return kvm.canSendWakeup(wakeup);
